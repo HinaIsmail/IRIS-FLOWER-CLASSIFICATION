@@ -1,0 +1,73 @@
+import seaborn as sns
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler
+iris = pd.read_csv('/kaggle/input/iris-flower-dataset/IRIS.csv')
+
+iris
+iris.head()
+iris.info()
+iris.describe()
+iris.isnull()
+iris.isnull().sum()
+Species = iris['species'].value_counts().reset_index()
+Species
+Species.head()
+Species.info()
+Species.describe()
+Species.isnull()
+plt.figure(figsize=(7,7))
+plt.pie(Species['count'],labels=['Iris-setosa','Iris-versicolor','Iris-virginica'],autopct='%1.3f%%',explode=[0,0,0])
+plt.legend(loc='upper right')
+plt.show()
+sns.FacetGrid(iris, hue ='species', height = 3).map(plt.scatter,"petal_length","sepal_width").add_legend()
+plt.show()
+iris['species'].value_counts()
+iris.shape
+input_size = 4
+
+# Specify the number of data samples to process in each batch
+batch_size = 10
+
+# Define the number of neurons in the first hidden layer
+hidden1 = 100
+
+# Define the number of neurons in the second hidden layer
+hidden2 = 50
+
+
+# Define the total number of classes/categories in the dataset
+classes = 3
+
+# Set the number of complete passes through the dataset during training
+epochs = 70
+# Create a Sequential model, which allows us to build a neural network layer by layer
+model = Sequential()
+
+# Add the first hidden layer with 'hidden1' neurons, using ReLU activation function
+# The 'input_dim' specifies the input size for this layer
+model.add(Dense(hidden1, input_dim=input_size, activation='relu'))
+# output = relu(dot(W, input) + bias)
+
+# Add the second hidden layer with 'hidden2' neurons, also using ReLU activation function
+model.add(Dense(hidden2, activation='relu'))
+
+
+# Add the output layer with 'classes' neurons, using softmax activation function
+# Softmax activation ensures that the output values represent probabilities of each class
+model.add(Dense(classes, activation='softmax'))
+
+### Compilation ###
+
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Display a summary of the model architecture, showing the layers and parameter counts
+model.summary()
